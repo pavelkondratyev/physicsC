@@ -17,6 +17,7 @@ typedef struct {
 
 void animate(int space[], Particles *ps);
 void animate_dev(int space[], Particles *ps);
+void setup(int space[], Particles *ps);
 void time_step(int space[], Particles *particles);
 void move_particle(Particle *p, int space[]);
 void add_particle(Particle *p, int space[], Particles *ps);
@@ -25,15 +26,14 @@ void print(int space[]);
 int main() 
 {
   // initialize grids
-  Particles particles = {malloc(sizeof(Particle*) * SIZE), 0};
+  Particles particles = {malloc(sizeof(Particle) * SIZE), 0};
   int space[SIZE];
   for(int i=0; i < SIZE; i++) {
     space[i] = 0;
   }
 
-  // add a particle
-  Particle p1 = {4, 2};
-  add_particle(&p1, space, &particles);
+  // add particles
+  setup(space, &particles);
 
   #ifdef DEBUG
     animate_dev(space, &particles);
@@ -56,6 +56,32 @@ void animate(int space[], Particles *ps)
     scanf("%d", &end);
     time_step(space, ps);
   }
+}
+
+void setup(int space[], Particles *ps)
+{
+  printf("How many particles would you like to create? (0-%d): ", SIZE);
+  int n;
+  scanf("%d", &n);
+
+  for (int i=0; i < n; i++) {
+    printf("\nParticle %d:\n", i + 1);
+
+    printf("Enter position (0-%d): ", SIZE);
+    int x;
+    scanf("%d", &x);
+
+    printf("Enter Velocity (negative is to the left) m/s: ");
+    int v;
+    scanf("%d", &v);
+
+    Particle *p = (*ps).list[ (*ps).size ] ;
+    p->x = x;
+    p->v = v;
+    (*ps).size++;
+    space[x] = 1;
+  }
+  printf("\n");
 }
 
 void animate_dev(int space[], Particles *ps)
