@@ -33,13 +33,13 @@ int main()
 
   // print each square of grid
   int end = 1;
-  /* printf("\n"); */
+  printf("\n");
   while(end) {
-    /* printf("\b\033[2A\r"); */
-    printf("\n\n");
+    printf("\b\033[2A\r");
+    /* printf("\n\n"); */
     print(space);
-    printf("\n\ncontinue? (1/0): ");
-    /* printf("\n\033[Kcontinue? (1/0): "); */
+    /* printf("\n\ncontinue? (1/0): "); */
+    printf("\n\033[Kcontinue? (1/0): ");
     scanf("%d", &end);
     time_step(space, &particles);
   }
