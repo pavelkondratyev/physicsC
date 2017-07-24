@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int SIZE = 25;
+const int SIZE = 25;
 
 typedef struct {
   int x;
@@ -9,7 +9,7 @@ typedef struct {
 } Particle;
 
 typedef struct {
-  Particle *list;
+  Particle *list[SIZE];
   int size;
 } Particles;
 
@@ -21,7 +21,7 @@ void print(int space[]);
 int main() 
 {
   // initialize grids
-  Particles particles = {malloc(sizeof(Particle) * SIZE), 0};
+  Particles particles = {malloc(sizeof(Particle*) * SIZE), 0};
   int space[SIZE];
   for(int i=0; i < SIZE; i++) {
     space[i] = 0;
@@ -51,7 +51,7 @@ int main()
 void time_step(int space[], Particles *ps)
 {
   for(int i=0; i < (*ps).size; i++) {
-    move_particle( &( (*ps).list[i] ), space);
+    move_particle( (*ps).list[i] , space);
   }
 }
 
@@ -69,7 +69,7 @@ void move_particle(Particle *p, int space[])
 void add_particle(Particle *p, int space[], Particles *ps)
 {
   space[ (*p).x ] = 1;
-  (*ps).list[ (*ps).size ] = *p;
+  (*ps).list[ (*ps).size ] = p;
   (*ps).size++;
 }
 
