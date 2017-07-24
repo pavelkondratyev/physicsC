@@ -9,6 +9,7 @@ const int SIZE = 25;
 typedef struct {
   int x;
   int v;
+  int a;
 } Particle;
 
 typedef struct {
@@ -38,6 +39,7 @@ int main()
     Particle *p = particles.list[0];
     p->x = 0;
     p->v = 2;
+    p->a = 1;
     particles.size++;
   #else
     setup(space, &particles);
@@ -93,6 +95,10 @@ void setup(int space[], Particles *ps)
     printf("Enter Velocity (negative is to the left) m/s: ");
     int v;
     scanf("%d", &v);
+
+    printf("Enter acceleration (m/s^2): ");
+    int a;
+    scanf("%d", &a);
 
     Particle *p = ps->list[ ps->size ];
     p->x = x;
