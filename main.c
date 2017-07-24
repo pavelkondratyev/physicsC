@@ -48,9 +48,9 @@ int main()
 void animate(int space[], Particles *ps)
 {
   int end = 1;
-  printf("\n");
+  printf("\n\n\n");
   while(end) {
-    printf("\b\033[2A\r");
+    printf("\b\033[3A\r");
     print(space);
     printf("\n\033[Kcontinue? (1/0): ");
     scanf("%d", &end);
@@ -98,7 +98,13 @@ void add_particle(Particle *p, int space[], Particles *ps)
 
 void print(int space[])
 {
-  printf("[");
+  // column numbers
+  for(int i=0; i < SIZE; i++) {
+    printf("  %d", i%10);
+  }
+
+  // print board
+  printf("\n[");
   for(int i=0; i < SIZE; i++) {
     int c = space[i] == 0 ? '-' : 'O';
     printf(" %c ", c);
