@@ -106,6 +106,7 @@ void setup(int space[], Particles *ps)
     Particle *p = ps->list[ ps->size ];
     p->x = x;
     p->v = v;
+    p->a = a;
     ps->size++;
     space[x] = 1;
   }
