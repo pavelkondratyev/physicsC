@@ -1,3 +1,5 @@
+/* #define DEBUG */
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -13,6 +15,8 @@ typedef struct {
   int size;
 } Particles;
 
+void animate(int space[], Particles *ps);
+void animate_dev(int space[], Particles *ps);
 void time_step(int space[], Particles *particles);
 void move_particle(Particle *p, int space[]);
 void add_particle(Particle *p, int space[], Particles *ps);
@@ -31,20 +35,39 @@ int main()
   Particle p1 = {4, 2};
   add_particle(&p1, space, &particles);
 
-  // print each square of grid
+  #ifdef DEBUG
+    animate_dev(space, &particles);
+    return 0;
+  #endif
+
+  animate(space, &particles);
+
+  return 0;
+}
+
+void animate(int space[], Particles *ps)
+{
   int end = 1;
   printf("\n");
   while(end) {
     printf("\b\033[2A\r");
-    /* printf("\n\n"); */
     print(space);
-    /* printf("\n\ncontinue? (1/0): "); */
     printf("\n\033[Kcontinue? (1/0): ");
     scanf("%d", &end);
-    time_step(space, &particles);
+    time_step(space, ps);
   }
+}
 
-  return 0;
+void animate_dev(int space[], Particles *ps)
+{
+  int end = 1;
+  while(end) {
+    printf("\n\n");
+    print(space);
+    printf("\n\ncontinue? (1/0): ");
+    scanf("%d", &end);
+    time_step(space, ps);
+  }
 }
 
 // simplified prototype, moves ahead 1 second
