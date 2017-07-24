@@ -40,6 +40,7 @@ int main()
     p->x = 0;
     p->v = 2;
     p->a = 1;
+    space[0] = 1;
     particles.size++;
   #else
     setup(space, &particles);
@@ -73,6 +74,8 @@ void animate_dev(int space[], Particles *ps)
   while(end) {
     printf("\n\n");
     print(space);
+    printf("\nvelocity: %d", ps->list[0]->v);
+    printf("\nacceleration: %d", ps->list[0]->a);
     printf("\n\ncontinue? (1/0): ");
     scanf("%d", &end);
     time_step(space, ps);
@@ -121,7 +124,11 @@ void time_step(int space[], Particles *ps)
 void move_particle(Particle *p, int space[])
 {
   space[ p->x ] = 0;
-  p->x += p->v;
+
+  // kinematic equations ~
+  p->x += p->v + 0.5 * p->a;
+  p->v += p->a;
+
   // keep in bounds
   p->x = p->x > (SIZE - 1) ? (SIZE - 1) : p->x;
   p->x = p->x < 0 ? 0 : p->x;
