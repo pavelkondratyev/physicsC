@@ -1,4 +1,5 @@
-/* #define DEBUG */
+/* #define NO_ANIMATE */
+/* #define NO_SETUP */
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -33,14 +34,20 @@ int main()
   }
 
   // add particles
-  setup(space, &particles);
-
-  #ifdef DEBUG
-    animate_dev(space, &particles);
-    return 0;
+  #ifdef NO_SETUP
+    Particle *p = particles.list[0];
+    p->x = 0;
+    p->v = 2;
+    particles.size++;
+  #else
+    setup(space, &particles);
   #endif
 
-  animate(space, &particles);
+  #ifdef NO_ANIMATE
+    animate_dev(space, &particles);
+  #else
+    animate(space, &particles);
+  #endif
 
   return 0;
 }
