@@ -5,6 +5,7 @@
 #include<stdlib.h>
 
 const int SIZE = 25;
+const int TIME = 1;
 
 typedef struct {
   int x;
@@ -127,8 +128,8 @@ void move_particle(Particle *p, int space[])
   space[ p->x ] = 0;
 
   // kinematic equations ~
-  p->x += p->v + 0.5 * p->a;
-  p->v += p->a;
+  p->x += p->v + 0.5 * p->a * TIME * TIME;
+  p->v += p->a * TIME;
 
   // keep in bounds
   p->x = p->x > (SIZE - 1) ? (SIZE - 1) : p->x;
