@@ -1,3 +1,5 @@
+/* #define DEFAULT */
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -21,6 +23,12 @@ int main()
     space[i]->v = 0;
     space[i]->a = 0;
   }
+
+  // add particles
+  #ifdef DEFAULT
+    Cell *c = space[0];
+    c->on = 1;
+  #endif
   
   print(space);
   printf("\n");
