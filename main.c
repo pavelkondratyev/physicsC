@@ -6,6 +6,7 @@ const int SIZE = 25;
 typedef struct {
   int on;
   int v;
+  int a;
 } Cell;
 
 int main() 
@@ -16,6 +17,7 @@ int main()
     space[i] = malloc( sizeof(Cell) );
     space[i]->on = 0;
     space[i]->v = 0;
+    space[i]->a = 0;
   }
   
   return 0;
