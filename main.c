@@ -1,4 +1,5 @@
 /* #define DEFAULT */
+/* #define NO_ANIMATE */
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -12,6 +13,7 @@ typedef struct {
 } Cell;
 
 void animate(Cell* []);
+void animate_dev(Cell* []);
 void print(Cell* []);
 
 int main() 
@@ -31,7 +33,12 @@ int main()
     c->on = 1;
   #endif
   
-  animate(space);
+  #ifdef NO_ANIMATE
+    animate_dev(space);
+  #else
+    animate(space);
+  #endif
+
   printf("\n");
 
   return 0;
@@ -45,6 +52,17 @@ void animate(Cell *space[])
     printf("\b\033[2A\r");
     print(space);
     printf("\n\033[Kcontinue? (1/0): ");
+    scanf("%d", &end);
+  }
+}
+
+void animate_dev(Cell *space[])
+{
+  int end = 1;
+  while(end) {
+    printf("\n\n");
+    print(space);
+    printf("\n\ncontinue? (1/0): ");
     scanf("%d", &end);
   }
 }
