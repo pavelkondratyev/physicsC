@@ -11,6 +11,7 @@ typedef struct {
   int a;
 } Cell;
 
+void animate(Cell* []);
 void print(Cell* []);
 
 int main() 
@@ -30,10 +31,22 @@ int main()
     c->on = 1;
   #endif
   
-  print(space);
+  animate(space);
   printf("\n");
 
   return 0;
+}
+
+void animate(Cell *space[])
+{
+  int end = 1;
+  printf("\n\n");
+  while(end) {
+    printf("\b\033[2A\r");
+    print(space);
+    printf("\n\033[Kcontinue? (1/0): ");
+    scanf("%d", &end);
+  }
 }
 
 void print(Cell *space[])
