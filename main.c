@@ -9,6 +9,8 @@ typedef struct {
   int a;
 } Cell;
 
+void print(Cell* []);
+
 int main() 
 {
   // initialize grids
@@ -20,5 +22,18 @@ int main()
     space[i]->a = 0;
   }
   
+  print(space);
+  printf("\n");
+
   return 0;
+}
+
+void print(Cell *space[])
+{
+  printf("[");
+  for (int i=0; i < SIZE; i++) {
+    int c = space[i]->on ? 'O' : '-';
+    printf(" %c ", c);
+  }
+  printf("]");
 }
