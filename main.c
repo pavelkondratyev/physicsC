@@ -1,161 +1,114 @@
+/* #define DEFAULT */
 /* #define NO_ANIMATE */
-/* #define NO_SETUP */
 
 #include<stdio.h>
 #include<stdlib.h>
+#include "main.h"
 
 const int SIZE = 25;
 const int TIME = 1;
 
-typedef struct {
-  int x;
-  int v;
-  int a;
-} Particle;
-
-typedef struct {
-  Particle *list[SIZE];
-  int size;
-} Particles;
-
-void animate(int space[], Particles *ps);
-void animate_dev(int space[], Particles *ps);
-void setup(int space[], Particles *ps);
-void time_step(int space[], Particles *particles);
-void move_particle(Particle *p, int space[]);
-void add_particle(Particle *p, int space[], Particles *ps);
-void print(int space[]);
-
 int main() 
 {
   // initialize grids
-  Particles particles = {malloc(sizeof(Particle) * SIZE), 0};
-  int space[SIZE];
+  Cell *space = malloc( sizeof(Cell) * SIZE);
   for(int i=0; i < SIZE; i++) {
-    space[i] = 0;
+    nullify(space, i);
   }
 
   // add particles
-  #ifdef NO_SETUP
-    Particle *p = particles.list[0];
-    p->x = 0;
-    p->v = 2;
-    p->a = 1;
-    space[0] = 1;
-    particles.size++;
+  #ifdef DEFAULT
+    space[0].on = 1;
+    space[0].v = 1;
+    space[0].a = 1;
+  #endif
+  
+  #ifdef NO_ANIMATE
+    animate_dev(space);
   #else
-    setup(space, &particles);
+    animate(space);
   #endif
 
-  #ifdef NO_ANIMATE
-    animate_dev(space, &particles);
-  #else
-    animate(space, &particles);
-  #endif
+  printf("\n");
 
   return 0;
 }
 
-void animate(int space[], Particles *ps)
+void animate(Cell *space)
 {
   int end = 1;
-  printf("\n\n\n");
+  printf("\n\n");
   while(end) {
-    printf("\b\033[3A\r");
+    printf("\b\033[2A\r");
     print(space);
     printf("\n\033[Kcontinue? (1/0): ");
     scanf("%d", &end);
-    time_step(space, ps);
+    space = time_step(space);
   }
 }
 
-void animate_dev(int space[], Particles *ps)
+void animate_dev(Cell *space)
 {
   int end = 1;
   while(end) {
     printf("\n\n");
     print(space);
-    printf("\nvelocity: %d", ps->list[0]->v);
-    printf("\nacceleration: %d", ps->list[0]->a);
     printf("\n\ncontinue? (1/0): ");
     scanf("%d", &end);
-    time_step(space, ps);
+    space = time_step(space);
   }
 }
 
-void setup(int space[], Particles *ps)
+Cell* time_step(Cell *space)
 {
-  printf("How many particles would you like to create? (0-%d): ", SIZE);
-  int n;
-  scanf("%d", &n);
+  for (int i=0; i < SIZE; i++) {
+    if (space[i].on) {
+      Cell *p = &(space[i]);
 
-  for (int i=0; i < n; i++) {
-    printf("\nParticle %d:\n", i + 1);
+      // kinematics
+      int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME;
+      p->v += p->a * TIME;
 
-    printf("Enter position (0-%d): ", SIZE);
-    int x;
-    scanf("%d", &x);
+      // keep in bounds
+      x = x > (SIZE - 1) ? (SIZE - 1) : x;
+      x = x < 0 ? 0 : x;
 
-    printf("Enter Velocity (negative is to the left) m/s: ");
-    int v;
-    scanf("%d", &v);
-
-    printf("Enter acceleration (m/s^2): ");
-    int a;
-    scanf("%d", &a);
-
-    Particle *p = ps->list[ ps->size ];
-    p->x = x;
-    p->v = v;
-    p->a = a;
-    ps->size++;
-    space[x] = 1;
-  }
-  printf("\n");
-}
-
-
-// simplified prototype, moves ahead 1 second
-void time_step(int space[], Particles *ps)
-{
-  for(int i=0; i < ps->size; i++) {
-    move_particle( ps->list[i] , space);
-  }
-}
-
-void move_particle(Particle *p, int space[])
-{
-  space[ p->x ] = 0;
-
-  // kinematic equations ~
-  p->x += p->v + 0.5 * p->a * TIME * TIME;
-  p->v += p->a * TIME;
-
-  // keep in bounds
-  p->x = p->x > (SIZE - 1) ? (SIZE - 1) : p->x;
-  p->x = p->x < 0 ? 0 : p->x;
-
-  space[ p->x ] = 1;
-}
-
-void add_particle(Particle *p, int space[], Particles *ps)
-{
-  space[ p->x ] = 1;
-  ps->list[ ps->size ] = p;
-  ps->size++;
-}
-
-void print(int space[])
-{
-  // column numbers
-  for(int i=0; i < SIZE; i++) {
-    printf("  %d", i%10);
+      p->dest = x;
+    }
   }
 
-  // print board
-  printf("\n[");
-  for(int i=0; i < SIZE; i++) {
-    int c = space[i] == 0 ? '-' : 'O';
+  // move particles (copy to out array w/ new positions)
+  // init
+  Cell *out = malloc( sizeof(Cell) * SIZE);
+  for (int i=0; i < SIZE; i++) {
+    nullify(out, i);
+  }
+  // move
+  for (int i=0; i < SIZE; i++) {
+    Cell c = space[i];
+    if (c.dest != -1) {
+      out[c.dest] = c;
+      out[c.dest].dest = -1;
+    }
+  }
+
+  return out;
+}
+
+void nullify(Cell *space, int i)
+{
+  Cell *p = &(space[i]);
+  p->on = 0;
+  p->v = 0;
+  p->a = 0;
+  p->dest = -1;
+}
+
+void print(Cell *space)
+{
+  printf("[");
+  for (int i=0; i < SIZE; i++) {
+    int c = space[i].on ? 'O' : '-';
     printf(" %c ", c);
   }
   printf("]");
