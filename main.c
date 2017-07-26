@@ -11,12 +11,12 @@ typedef struct {
   int on;
   int v;
   int a;
-  int moved;
+  int dest;
 } Cell;
 
 void animate(Cell *);
 void animate_dev(Cell *);
-void time_step(Cell *);
+Cell* time_step(Cell *);
 void nullify(Cell *, int);
 void print(Cell *);
 
@@ -25,16 +25,14 @@ int main()
   // initialize grids
   Cell *space = malloc( sizeof(Cell) * SIZE);
   for(int i=0; i < SIZE; i++) {
-    space[i].on = 0;
-    space[i].v = 0;
-    space[i].a = 0;
-    space[i].moved = 0;
+    nullify(space, i);
   }
 
   // add particles
   #ifdef DEFAULT
     space[0].on = 1;
     space[0].v = 1;
+    space[0].a = 1;
   #endif
   
   #ifdef NO_ANIMATE
@@ -57,7 +55,7 @@ void animate(Cell *space)
     print(space);
     printf("\n\033[Kcontinue? (1/0): ");
     scanf("%d", &end);
-    time_step(space);
+    space = time_step(space);
   }
 }
 
@@ -69,42 +67,44 @@ void animate_dev(Cell *space)
     print(space);
     printf("\n\ncontinue? (1/0): ");
     scanf("%d", &end);
-    time_step(space);
+    space = time_step(space);
   }
 }
 
-void time_step(Cell *space)
+Cell* time_step(Cell *space)
 {
   for (int i=0; i < SIZE; i++) {
-    if (space[i].on && !space[i].moved) {
-      Cell p = space[i];
+    if (space[i].on) {
+      Cell *p = &(space[i]);
 
       // kinematics
-      int x = i + p.v * TIME + 0.5 * p.a * TIME * TIME;
-      p.v += p.a * TIME;
+      int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME;
+      p->v += p->a * TIME;
 
       // keep in bounds
       x = x > (SIZE - 1) ? (SIZE - 1) : x;
       x = x < 0 ? 0 : x;
 
-      // mark as already moved
-      p.moved = 1;
-
-      // update location in grid
-      if (x) {
-        nullify(space, i);
-        space[x] = p;
-      }
-      else {
-        space[i] = p;
-      }
+      p->dest = x;
     }
   }
 
-  // reset moved (remove this later)
+  // move particles (copy to out array w/ new positions)
+  // init
+  Cell *out = malloc( sizeof(Cell) * SIZE);
   for (int i=0; i < SIZE; i++) {
-    space[i].moved = 0;
+    nullify(out, i);
   }
+  // move
+  for (int i=0; i < SIZE; i++) {
+    Cell c = space[i];
+    if (c.dest != -1) {
+      out[c.dest] = c;
+      out[c.dest].dest = -1;
+    }
+  }
+
+  return out;
 }
 
 void nullify(Cell *space, int i)
@@ -113,6 +113,7 @@ void nullify(Cell *space, int i)
   p->on = 0;
   p->v = 0;
   p->a = 0;
+  p->dest = -1;
 }
 
 void print(Cell *space)
