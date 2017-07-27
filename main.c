@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include "main.h"
 
 const int SIZE = 25;
@@ -36,13 +37,12 @@ int main()
 
 void animate(Cell *space)
 {
-  int end = 1;
-  printf("\n\n");
-  while(end) {
-    printf("\b\033[2A\r");
+  printf("\n");
+  while(1) {
+    printf("\b\033[1A\r");
     print(space);
-    printf("\n\033[Kcontinue? (1/0): ");
-    scanf("%d", &end);
+    printf("\n");
+    usleep(TIME * 1000000);
     space = time_step(space);
   }
 }
