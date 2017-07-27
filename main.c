@@ -20,7 +20,7 @@ int main()
   #ifdef DEFAULT
     space[0].on = 1;
     space[0].v = 1;
-    space[0].a = 1;
+    space[0].a = 2;
   #endif
   
   #ifdef NO_ANIMATE
@@ -63,6 +63,7 @@ Cell* time_step(Cell *space)
 {
   for (int i=0; i < SIZE; i++) {
     if (space[i].on) {
+      // grab particle
       Cell *p = &(space[i]);
 
       // kinematics
@@ -85,10 +86,10 @@ Cell* time_step(Cell *space)
   }
   // move
   for (int i=0; i < SIZE; i++) {
-    Cell c = space[i];
-    if (c.dest != -1) {
-      out[c.dest] = c;
-      out[c.dest].dest = -1;
+    Cell p = space[i];
+    if (p.dest != -1) {
+      out[p.dest] = p;
+      out[p.dest].dest = -1;
     }
   }
 
@@ -97,11 +98,11 @@ Cell* time_step(Cell *space)
 
 void nullify(Cell *space, int i)
 {
-  Cell *p = &(space[i]);
-  p->on = 0;
-  p->v = 0;
-  p->a = 0;
-  p->dest = -1;
+  Cell *c = &(space[i]);
+  c->on = 0;
+  c->v = 0;
+  c->a = 0;
+  c->dest = -1;
 }
 
 void print(Cell *space)
