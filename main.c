@@ -116,7 +116,7 @@ void print(Cell *space)
 {
   printf("[");
   for (int i=0; i < SIZE; i++) {
-    int c = space[i].on ? 'O' : '-';
+    char c = space[i].on ? 'O' : '-';
     printf(" %c ", c);
   }
   printf("]");
