@@ -53,7 +53,14 @@ void animate_dev(Cell *space)
   while(end) {
     printf("\n\n");
     print(space);
-    printf("\n\ncontinue? (1/0): ");
+    for (int i=0; i < SIZE; i++) {
+      if (space[i].on) {
+        printf("\npoisition: %d", i);
+        printf("\nvelocity: %d", space[i].v);
+        printf("\n");
+      }
+    }
+    printf("\ncontinue? (1/0): ");
     scanf("%d", &end);
     space = time_step(space);
   }
