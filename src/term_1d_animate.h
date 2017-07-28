@@ -1,2 +1,11 @@
+#ifndef TERM_1D_ANIMATE_H
+#define TERM_1D_ANIMATE_H
+
+typedef struct Cell Cell;
+
 void print_horizontal(Cell* space);
-void hello_world();
+
+extern const int SIZE;
+extern const int TIME;
+
+#endif
