@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include "main.h"
 
 const int SIZE = 25;
@@ -21,6 +22,10 @@ int main()
     space[0].on = 1;
     space[0].v = 1;
     space[0].a = 1;
+
+    space[10].on = 1;
+    space[10].v = 1;
+    space[10].a = 0;
   #endif
   
   #ifdef NO_ANIMATE
@@ -36,13 +41,12 @@ int main()
 
 void animate(Cell *space)
 {
-  int end = 1;
-  printf("\n\n");
-  while(end) {
-    printf("\b\033[2A\r");
+  printf("\n");
+  while(1) {
+    printf("\b\033[1A\r");
     print(space);
-    printf("\n\033[Kcontinue? (1/0): ");
-    scanf("%d", &end);
+    printf("\n");
+    usleep(TIME * 1000000 / 4);
     space = time_step(space);
   }
 }
@@ -53,7 +57,14 @@ void animate_dev(Cell *space)
   while(end) {
     printf("\n\n");
     print(space);
-    printf("\n\ncontinue? (1/0): ");
+    for (int i=0; i < SIZE; i++) {
+      if (space[i].on) {
+        printf("\npoisition: %d", i);
+        printf("\nvelocity: %d", space[i].v);
+        printf("\n");
+      }
+    }
+    printf("\ncontinue? (1/0): ");
     scanf("%d", &end);
     space = time_step(space);
   }
@@ -63,6 +74,7 @@ Cell* time_step(Cell *space)
 {
   for (int i=0; i < SIZE; i++) {
     if (space[i].on) {
+      // grab particle
       Cell *p = &(space[i]);
 
       // kinematics
@@ -85,10 +97,10 @@ Cell* time_step(Cell *space)
   }
   // move
   for (int i=0; i < SIZE; i++) {
-    Cell c = space[i];
-    if (c.dest != -1) {
-      out[c.dest] = c;
-      out[c.dest].dest = -1;
+    Cell p = space[i];
+    if (p.dest != -1) {
+      out[p.dest] = p;
+      out[p.dest].dest = -1;
     }
   }
 
@@ -97,18 +109,18 @@ Cell* time_step(Cell *space)
 
 void nullify(Cell *space, int i)
 {
-  Cell *p = &(space[i]);
-  p->on = 0;
-  p->v = 0;
-  p->a = 0;
-  p->dest = -1;
+  Cell *c = &(space[i]);
+  c->on = 0;
+  c->v = 0;
+  c->a = 0;
+  c->dest = -1;
 }
 
 void print(Cell *space)
 {
   printf("[");
   for (int i=0; i < SIZE; i++) {
-    int c = space[i].on ? 'O' : '-';
+    char c = space[i].on ? 'O' : '-';
     printf(" %c ", c);
   }
   printf("]");
