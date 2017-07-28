@@ -21,7 +21,11 @@ int main()
   #ifdef DEFAULT
     space[0].on = 1;
     space[0].v = 1;
-    space[0].a = 2;
+    space[0].a = 1;
+
+    space[10].on = 1;
+    space[10].v = 1;
+    space[10].a = 0;
   #endif
   
   #ifdef NO_ANIMATE
@@ -42,7 +46,7 @@ void animate(Cell *space)
     printf("\b\033[1A\r");
     print(space);
     printf("\n");
-    usleep(TIME * 1000000);
+    usleep(TIME * 1000000 / 4);
     space = time_step(space);
   }
 }
