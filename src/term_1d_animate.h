@@ -3,7 +3,8 @@
 
 typedef struct Cell Cell;
 
-void print_horizontal(Cell* space);
+void print_horizontal(Cell *);
+void print_vertical(Cell *);
 
 extern const int SIZE;
 extern const int TIME;

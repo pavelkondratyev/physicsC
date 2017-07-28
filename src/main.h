@@ -4,4 +4,5 @@
 typedef struct Cell Cell;
 
 void animate_horizontal(Cell *);
+void animate_vertical(Cell *);
 #endif
