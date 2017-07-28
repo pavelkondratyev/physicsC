@@ -6,6 +6,8 @@
 #include "engine.h"
 #include "term_1d_animate.h"
 
+void animate_horizontal(Cell *);
+
 const int SIZE = 25;
 const int TIME = 1;
 
@@ -20,6 +22,15 @@ int main() {
   space[0].on = 1;
   space[0].v = 1;
 
+  animate_horizontal(space);
+
+  free(space);
+
+  return 0;
+}
+
+void animate_horizontal(Cell *space)
+{
   // setup select timeout
   fd_set rfds;
   struct timeval tv;
@@ -48,8 +59,4 @@ int main() {
   char str[100];
   scanf("%s", str);
   printf("\033[1A");
-
-  free(space);
-
-  return 0;
 }
