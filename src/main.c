@@ -3,10 +3,9 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "main.h"
 #include "engine.h"
 #include "term_1d_animate.h"
-
-void animate_horizontal(Cell *);
 
 const int SIZE = 25;
 const int TIME = 1;
