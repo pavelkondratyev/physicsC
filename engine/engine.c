@@ -115,13 +115,3 @@ void nullify(Cell *space, int i)
   c->a = 0;
   c->dest = -1;
 }
-
-void print(Cell *space)
-{
-  printf("[");
-  for (int i=0; i < SIZE; i++) {
-    char c = space[i].on ? 'O' : '-';
-    printf(" %c ", c);
-  }
-  printf("]");
-}
