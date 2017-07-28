@@ -2,9 +2,11 @@
 
 A cellular automata-inspired low-rez discrete event simulation with absolutely no collision detection
 #
-![](passing.gif)
+![](screenshots/ball_up.gif)
 #
-![](collision1.gif)
+![](screenshots/passing.gif)
 #
-![](swallowing.gif)
+![](screenshots/collision1.gif)
+#
+![](screenshots/swallowing.gif)
 
