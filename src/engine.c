@@ -1,10 +1,9 @@
 /* #define DEFAULT */
 /* #define NO_ANIMATE */
 
-#include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
-#include "main.h"
+#include "engine.h"
 
 const int SIZE = 25;
 const int TIME = 1;
