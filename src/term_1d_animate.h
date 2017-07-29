@@ -3,6 +3,7 @@
 
 typedef struct Cell Cell;
 
+void animate(Cell *, char);
 void print_horizontal(Cell *);
 void print_vertical(Cell *);
 
