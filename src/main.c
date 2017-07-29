@@ -8,10 +8,6 @@
 const int SIZE = 40;
 const int TIME = 1;
 
-void create_particles(Cell *);
-int get_position();
-int get_attribute(char *);
-
 int main() {
   // init
   Cell *space = malloc( sizeof(Cell) * SIZE );
