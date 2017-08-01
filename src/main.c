@@ -13,9 +13,14 @@ int main(int argc, char **argv) {
   // parse command line arguments
   int isDefaultSetupFlag = 0;
   int isHorizontalFlag = 0;
+  char *sizeValue = NULL;
   int c;
 
-  while( (c = getopt(argc, argv, "dr")) != -1)
+  // 3 possible command line options
+  // -d represents default single particle setup
+  // -r represents ho(r)izontal printing
+  // -s represents SIZE
+  while( (c = getopt(argc, argv, "drs:")) != -1)
     switch(c)
     {
       case 'd':
@@ -24,7 +29,15 @@ int main(int argc, char **argv) {
       case 'r':
         isHorizontalFlag = 1;
         break;
+      case 's':
+        sizeValue = optarg;
+        break;
     }
+
+  if (sizeValue) {
+    SIZE = strtol(sizeValue, NULL, 10);
+    printf("size value: %d\n", SIZE);
+  }
 
   // init
   Cell *space = malloc( sizeof(Cell) * SIZE );
@@ -34,7 +47,7 @@ int main(int argc, char **argv) {
 
   // init particles
   if(isDefaultSetupFlag) {
-    printf("using default setup, 1 particle:\n");
+    printf("Using default setup, 1 particle:\n");
     printf("position: 0\nvelocity: +8\nacceleration: -1\n");
     space[0].on = 1;
     space[0].v = 8;
