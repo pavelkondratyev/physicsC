@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
 
 #include "main.h"
 #include "engine.h"
@@ -8,7 +9,24 @@
 const int SIZE = 40;
 const int TIME = 1;
 
-int main() {
+int main(int argc, char **argv) {
+  // parse command line arguments
+  int isDefaultSetupFlag = 0;
+  int isVerticalSetupFlag = 0;
+  int c;
+
+  while( (c = getopt(argc, argv, "du")) != -1)
+    switch(c)
+    {
+      case 'd':
+        isDefaultSetupFlag = 1;
+        break;
+      case 'u':
+        isVerticalSetupFlag = 1;
+        break;
+    }
+
+
   // init
   Cell *space = malloc( sizeof(Cell) * SIZE );
   for(int i=0; i < SIZE; i++) {
@@ -16,9 +34,19 @@ int main() {
   }
 
   // init particles
-  create_particles(space);
+  if(isDefaultSetupFlag) {
+    printf("using default setup, 1 particle:\n");
+    printf("position: 0\nvelocity: +8\nacceleration: -1\n");
+    space[0].on = 1;
+    space[0].v = 8;
+    space[0].a = -1;
+  }
+  else {
+    create_particles(space);
+  }
 
-  animate(space, 'v');
+  char orientation = isVerticalSetupFlag ? 'u' : 'h';
+  animate(space, orientation);
 
   free(space);
 
