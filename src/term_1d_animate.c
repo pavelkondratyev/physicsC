@@ -34,7 +34,7 @@ void animate(Cell *space, char orientation)
       print_vertical(space);
     }
 
-    printf("Type any key and <Enter> to exit: \n");
+    printf("Type to (q)uit: \n");
 
     FD_ZERO(&rfds);
     FD_SET(0, &rfds);
