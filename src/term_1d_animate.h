@@ -8,6 +8,7 @@ void print_horizontal(Cell *);
 void print_vertical(Cell *);
 
 extern int SIZE;
+extern int FPS;
 extern const int TIME;
 
 #endif

@@ -7,6 +7,7 @@
 #include "term_1d_animate.h"
 
 int SIZE = 40;
+int FPS = 10;
 const int TIME = 1;
 
 int main(int argc, char **argv) {
@@ -14,13 +15,14 @@ int main(int argc, char **argv) {
   int isDefaultSetupFlag = 0;
   int isHorizontalFlag = 0;
   char *sizeValue = NULL;
+  char *fpsValue = NULL;
   int c;
 
   // 3 possible command line options
   // -d represents default single particle setup
   // -r represents ho(r)izontal printing
   // -s represents SIZE
-  while( (c = getopt(argc, argv, "drs:")) != -1)
+  while( (c = getopt(argc, argv, "drs:f:")) != -1)
     switch(c)
     {
       case 'd':
@@ -32,11 +34,18 @@ int main(int argc, char **argv) {
       case 's':
         sizeValue = optarg;
         break;
+      case 'f':
+        fpsValue = optarg;
+        break;
     }
 
   if (sizeValue) {
     SIZE = strtol(sizeValue, NULL, 10);
     printf("size value: %d\n", SIZE);
+  }
+  if (fpsValue) {
+    FPS = strtol(fpsValue, NULL, 10);
+    printf("fps value: %d\n", FPS);
   }
 
   // init

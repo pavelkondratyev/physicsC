@@ -13,7 +13,7 @@ void animate(Cell *space, char orientation)
 
   // 1/60 delay
   tv.tv_sec = 0;
-  tv.tv_usec = 1000000 / 10;
+  tv.tv_usec = TIME * 1000000 / FPS;
 
   int res;
 
