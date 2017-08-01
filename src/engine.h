@@ -11,7 +11,7 @@ typedef struct Cell {
 Cell* time_step(Cell *);
 void nullify(Cell *, int);
 
-extern const int SIZE;
+extern int SIZE;
 extern const int TIME;
 
 #endif

@@ -7,7 +7,7 @@ void animate(Cell *, char);
 void print_horizontal(Cell *);
 void print_vertical(Cell *);
 
-extern const int SIZE;
+extern int SIZE;
 extern const int TIME;
 
 #endif

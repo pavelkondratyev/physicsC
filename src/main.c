@@ -6,7 +6,7 @@
 #include "engine.h"
 #include "term_1d_animate.h"
 
-const int SIZE = 40;
+int SIZE = 40;
 const int TIME = 1;
 
 int main(int argc, char **argv) {
