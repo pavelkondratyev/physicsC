@@ -15,13 +15,13 @@ int main(int argc, char **argv) {
   int isHorizontalFlag = 0;
   int c;
 
-  while( (c = getopt(argc, argv, "ds")) != -1)
+  while( (c = getopt(argc, argv, "dr")) != -1)
     switch(c)
     {
       case 'd':
         isDefaultSetupFlag = 1;
         break;
-      case 's':
+      case 'r':
         isHorizontalFlag = 1;
         break;
     }
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     create_particles(space);
   }
 
-  char orientation = isHorizontalFlag ? 's' : 'u';
+  char orientation = isHorizontalFlag ? 'r' : 'u';
   animate(space, orientation);
 
   free(space);
