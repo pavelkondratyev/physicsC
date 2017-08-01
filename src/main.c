@@ -1,95 +1,107 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <time.h>
-#include <unistd.h>
+#include<unistd.h>
 
 #include "main.h"
 #include "engine.h"
 #include "term_1d_animate.h"
 
-const int SIZE = 40;
+int SIZE = 40;
+int FPS = 10;
 const int TIME = 1;
 
-int main() {
+int main(int argc, char **argv) {
+  // parse command line arguments
+  int isDefaultSetupFlag = 0;
+  int isHorizontalFlag = 0;
+  char *sizeValue = NULL;
+  char *fpsValue = NULL;
+  int c;
+
+  // 3 possible command line options
+  // -d represents default single particle setup
+  // -r represents ho(r)izontal printing
+  // -s represents SIZE
+  while( (c = getopt(argc, argv, "drs:f:")) != -1)
+    switch(c)
+    {
+      case 'd':
+        isDefaultSetupFlag = 1;
+        break;
+      case 'r':
+        isHorizontalFlag = 1;
+        break;
+      case 's':
+        sizeValue = optarg;
+        break;
+      case 'f':
+        fpsValue = optarg;
+        break;
+    }
+
+  if (sizeValue) {
+    SIZE = strtol(sizeValue, NULL, 10);
+    printf("size value: %d\n", SIZE);
+  }
+  if (fpsValue) {
+    FPS = strtol(fpsValue, NULL, 10);
+    printf("fps value: %d\n", FPS);
+  }
+
   // init
   Cell *space = malloc( sizeof(Cell) * SIZE );
   for(int i=0; i < SIZE; i++) {
     nullify(space, i);
   }
 
-  // create 1 particle
-  space[0].on = 1;
-  space[0].v = 8;
-  space[0].a = -1;
+  // init particles
+  if(isDefaultSetupFlag) {
+    printf("Using default setup, 1 particle:\n");
+    printf("position: 0\nvelocity: +8\nacceleration: -1\n");
+    space[0].on = 1;
+    space[0].v = 8;
+    space[0].a = -1;
+  }
+  else {
+    create_particles(space);
+  }
 
-  /* animate_horizontal(space); */
-  animate_vertical(space);
+  char orientation = isHorizontalFlag ? 'r' : 'u';
+  animate(space, orientation);
 
   free(space);
 
   return 0;
 }
 
-void animate_horizontal(Cell *space)
+void create_particles(Cell *space)
 {
-  // setup select timeout
-  fd_set rfds;
-  struct timeval tv;
+  int numParticles;
+  printf("How many particles would you like to create? (0-2): ");
+  scanf("%d", &numParticles);
 
-  // 1/60 second delay
-  tv.tv_sec = 0;
-  tv.tv_usec = 1000000 / 60;
-
-  int res;
-
-  printf("\n\n");
-  do {
-    printf("\033[2A\r");
-    print_horizontal(space);
-    printf("\nType any key and <Enter> to exit: \n");
-
-    // scan for input
-    FD_ZERO(&rfds);
-    FD_SET(0, &rfds);
-    res = select(1, &rfds, NULL, NULL, &tv);
-
-    space = time_step(space);
-  } while( ! FD_ISSET(0, &rfds) );
-
-  // clear user input
-  char str[100];
-  scanf("%s", str);
-}
-
-void animate_vertical(Cell *space)
-{
-  fd_set rfds;
-  struct timeval tv;
-
-  // 1/60 second delay
-  tv.tv_sec = 0;
-  tv.tv_usec = 1000000 / 14;
-
-  int res;
-
-  for (int i=0; i <= SIZE; i++) {
+  for (int i=0; i < numParticles; i++) {
+    printf("\nParticle %d\n", i+1);
+    int x = get_position(i+1);
+    space[x].on = 1;
+    space[x].v = get_attribute("velocity");
+    space[x].a = get_attribute("acceleration");
     printf("\n");
   }
-  usleep(300000);
-  do {
-    printf("\033[41A\r");
+}
 
-    print_vertical(space);
-    printf("Type any key and <Enter> to exit: \n");
+int get_position()
+{
+  int x;
+  printf("Enter position (0-%d): ", SIZE - 1);
+  scanf("%d", &x);
+  return x;
+}
 
-    FD_ZERO(&rfds);
-    FD_SET(0, &rfds);
-    res = select(1, &rfds, NULL, NULL, &tv);
-
-    space = time_step(space);
-  } while( ! FD_ISSET(0, &rfds) );
-
-  // clear user input
-  char str[100];
-  scanf("%s", str);
+int get_attribute(char *attr)
+{
+  int out;
+  printf("Enter %s: ", attr);
+  scanf("%d", &out);
+  return out;
 }
