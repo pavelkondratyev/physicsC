@@ -12,17 +12,17 @@ const int TIME = 1;
 int main(int argc, char **argv) {
   // parse command line arguments
   int isDefaultSetupFlag = 0;
-  int isVerticalSetupFlag = 0;
+  int isHorizontalFlag = 0;
   int c;
 
-  while( (c = getopt(argc, argv, "du")) != -1)
+  while( (c = getopt(argc, argv, "ds")) != -1)
     switch(c)
     {
       case 'd':
         isDefaultSetupFlag = 1;
         break;
-      case 'u':
-        isVerticalSetupFlag = 1;
+      case 's':
+        isHorizontalFlag = 1;
         break;
     }
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     create_particles(space);
   }
 
-  char orientation = isVerticalSetupFlag ? 'u' : 'h';
+  char orientation = isHorizontalFlag ? 's' : 'u';
   animate(space, orientation);
 
   free(space);

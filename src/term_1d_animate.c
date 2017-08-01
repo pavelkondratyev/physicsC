@@ -17,7 +17,7 @@ void animate(Cell *space, char orientation)
 
   int res;
 
-  int numLines = orientation == 'h' ? 2 : (SIZE + 1);
+  int numLines = orientation == 's' ? 2 : (SIZE + 1);
 
   for (int i=0; i < numLines; i++) {
     printf("\n");
@@ -26,7 +26,7 @@ void animate(Cell *space, char orientation)
   do {
     printf("\033[%dA\r", numLines);
 
-    if (orientation == 'u') {
+    if (orientation == 's') {
       print_horizontal(space);
       printf("\n");
     }
