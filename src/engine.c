@@ -45,4 +45,7 @@ void nullify(Cell *space, int i)
   c->v = 0;
   c->a = 0;
   c->dest = -1;
+  c->nbhdOf = -1;
+  c->negCalculated = 0;
+  c->posCalculated = 0;
 }

@@ -6,6 +6,9 @@ typedef struct Cell {
   int v;
   int a;
   int dest;
+  int nbhdOf;
+  int negCalculated;
+  int posCalculated;
 } Cell;
 
 Cell* time_step(Cell *);
