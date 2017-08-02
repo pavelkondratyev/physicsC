@@ -3,22 +3,34 @@
 
 Cell* time_step(Cell *space)
 {
-  for (int i=0; i < SIZE; i++) {
-    if (space[i].on) {
-      // grab particle
-      Cell *p = &(space[i]);
+  // this represents the soonest collision within one TIME unit
+  // init as "impossible" collision
+  Collision first_collision = {
+    TIME,
+    -1,
+    -1
+  };
 
-      // kinematics
-      int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME;
-      p->v += p->a * TIME;
+  calculate_nbhds(space, &first_collision);
 
-      // keep in bounds
-      x = x > (SIZE - 1) ? (SIZE - 1) : x;
-      x = x < 0 ? 0 : x;
+  resolve_collision(space, first_collision);
 
-      p->dest = x;
-    }
-  }
+  /* for (int i=0; i < SIZE; i++) { */
+    /* if (space[i].on) { */
+      /* // grab particle */
+      /* Cell *p = &(space[i]); */
+
+      /* // kinematics */
+      /* int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME; */
+      /* p->v += p->a * TIME; */
+
+      /* // keep in bounds */
+      /* x = x > (SIZE - 1) ? (SIZE - 1) : x; */
+      /* x = x < 0 ? 0 : x; */
+
+      /* p->dest = x; */
+    /* } */
+  /* } */
 
   // move particles (copy to out array w/ new positions)
   // init
@@ -39,6 +51,14 @@ Cell* time_step(Cell *space)
   }
 
   return out;
+}
+
+void calculate_nbhds(Cell *space, Collision *collision)
+{
+}
+
+void resolve_collision(Cell *space, Collision first_collision)
+{
 }
 
 void nullify(Cell *space, int i)
