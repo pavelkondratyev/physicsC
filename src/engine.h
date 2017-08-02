@@ -11,6 +11,12 @@ typedef struct Cell {
   int posCalculated;
 } Cell;
 
+typedef struct Collision {
+  int time;
+  int c1;
+  int c2;
+} Collision;
+
 Cell* time_step(Cell *);
 void nullify(Cell *, int);
 
