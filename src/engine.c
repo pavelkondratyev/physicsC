@@ -33,6 +33,9 @@ Cell* time_step(Cell *space)
       out[p.dest] = p;
       out[p.dest].dest = -1;
     }
+    else if (p.on) {
+      out[i] = p;
+    }
   }
 
   return out;
