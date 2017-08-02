@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   // init particles
   if(isDefaultSetupFlag) {
     printf("Using default setup, 1 particle:\n");
-    printf("position: 0\nvelocity: +8\nacceleration: -1\n");
+    printf("position: 0\nvelocity: +8\nacceleration: -1\n\n");
     space[0].on = 1;
     space[0].v = 8;
     space[0].a = -1;

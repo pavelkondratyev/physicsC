@@ -15,23 +15,6 @@ Cell* time_step(Cell *space)
 
   resolve_collision(space, first_collision);
 
-  /* for (int i=0; i < SIZE; i++) { */
-    /* if (space[i].on) { */
-      /* // grab particle */
-      /* Cell *p = &(space[i]); */
-
-      /* // kinematics */
-      /* int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME; */
-      /* p->v += p->a * TIME; */
-
-      /* // keep in bounds */
-      /* x = x > (SIZE - 1) ? (SIZE - 1) : x; */
-      /* x = x < 0 ? 0 : x; */
-
-      /* p->dest = x; */
-    /* } */
-  /* } */
-
   // move particles (copy to out array w/ new positions)
   // init
   Cell *out = malloc( sizeof(Cell) * SIZE);
@@ -58,6 +41,22 @@ Cell* time_step(Cell *space)
 
 void calculate_nbhds(Cell *space, Collision *collision)
 {
+  for (int i=0; i < SIZE; i++) {
+    if (space[i].on) {
+      // grab particle
+      Cell *p = &(space[i]);
+
+      // kinematics
+      int x = i + p->v * TIME + 0.5 * p->a * TIME * TIME;
+      p->v += p->a * TIME;
+
+      // keep in bounds
+      x = x > (SIZE - 1) ? (SIZE - 1) : x;
+      x = x < 0 ? 0 : x;
+
+      p->dest = x;
+    }
+  }
 }
 
 void resolve_collision(Cell *space, Collision first_collision)
