@@ -42,9 +42,12 @@ Cell* time_step(Cell *space)
   for (int i=0; i < SIZE; i++) {
     Cell p = space[i];
     if (p.dest != -1) {
+      p.negCalculated = 0;
+      p.posCalculated = 0;
       out[p.dest] = p;
       out[p.dest].dest = -1;
     }
+    // this will be deleted
     else if (p.on) {
       out[i] = p;
     }
